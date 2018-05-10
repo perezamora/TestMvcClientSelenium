@@ -20,6 +20,7 @@ namespace TestMvcCliente
         public void TestSetup()
         {
             driverChrome = new ChromeDriver();
+            driverChrome.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(15);
         }
 
         [TestCleanup]
@@ -43,12 +44,8 @@ namespace TestMvcCliente
             driverChrome.FindElement(By.Id("FechaNacimiento")).SendKeys("10/01/1998");
             driverChrome.FindElement(By.Id("BtnCreate")).Click();
 
-            // assert lista students
-            WebDriverWait wait = new WebDriverWait(driverChrome, TimeSpan.FromSeconds(15));
-            IWebElement navList = wait.Until<IWebElement>((d) =>
-            {
-                return d.FindElement(By.Id("tableStudent"));
-            });
+            var result = driverChrome.FindElement(By.Id("tableStudent")).Text;
+            Assert.IsTrue(result.Length > 1);
         }
     }
 }
